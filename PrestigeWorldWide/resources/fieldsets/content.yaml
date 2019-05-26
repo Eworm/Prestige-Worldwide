@@ -31,6 +31,21 @@ fields:
       CUSTOM: Custom
     show_when:
       pw_recurring: true
+  pw_recurring_byday:
+    type: checkboxes
+    display: "Repeat on"
+    inline: true
+    options:
+      MO: Monday
+      TU: Tuesday
+      WE: Wednesday
+      TH: Thursday
+      FR: Friday
+      SA: Saturday
+      SU: Sunday
+    show_when:
+      pw_recurring_frequency: WEEKLY
+      pw_recurring: true
   pw_recurring_interval:
     type: text
     display: "Every #"
