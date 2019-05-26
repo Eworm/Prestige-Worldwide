@@ -9,9 +9,10 @@ class PrestigeWorldWideSuggestMode extends AbstractMode
     {
         $forms = Form::all();
         $formvalues = [];
+        $formvalues[] = ['value' => null, 'text' => null];
 
         foreach ($forms as $form) {
-            $formvalues[] = (object) [
+            $formvalues[] = [
                 'value' => $form['name'],
                 'text' => $form['title']
             ];
