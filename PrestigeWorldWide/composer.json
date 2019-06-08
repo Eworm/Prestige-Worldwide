@@ -2,6 +2,7 @@
     "name": "wout-mager/prestigeworldwide",
     "require": {
         "simshaun/recurr": "^3.1",
-        "spatie/calendar-links": "^1.1.1"
+        "spatie/calendar-links": "^1.1.1",
+        "eluceo/ical" : "0.11"
     }
 }

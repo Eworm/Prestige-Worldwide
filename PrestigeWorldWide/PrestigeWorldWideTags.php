@@ -2,6 +2,7 @@
 
 namespace Statamic\Addons\PrestigeWorldWide;
 
+use Statamic\Addons\PrestigeWorldWide\iCal;
 use Recurr\Rule;
 use Recurr\Transformer;
 use Spatie\CalendarLinks\Link;
@@ -316,4 +317,92 @@ class PrestigeWorldWideTags extends Tags
         // return $c;
     }
 
+    /**
+     * The {{ prestige_world_wide:calendar }} tag
+     *
+     * @return string
+     */
+    public function calendar()
+    {
+        $feed_start = $this->getParam('start');
+        $feed_end = $this->getParam('end');
+        if (isset($feed_end))
+        {
+            $feed_end = carbon($feed_start)->modify($feed_end)->format('Y-m-d H:i');
+        }
+        $data = [];
+        $ical = new iCal();
+        $ical = $this->getFromCache($ical, 'pw_ical');
+        $data = $this->getEvents($ical, $data, $feed_start, $feed_end);
+        usort($data, array($this, 'dateSort'));
+        return $this->parseLoop($data);
+    }
+
+    /**
+     * Get all events
+     *
+     * @return array
+     */
+    private function getEvents($ical, $data, $start, $end)
+    {
+        if (isset($start) && isset($end))
+        {
+            $events = $ical->eventsByDateBetween($start, $end);
+        }
+        else
+        {
+            $events = $ical->eventsByDate();
+        }
+
+        foreach ($events as $date => $days)
+        {
+            foreach ($days as $event)
+            {
+                $data[] = $this->addEventData($event);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Add event data
+     *
+     * @return array
+     */
+    private function addEventData($event)
+    {
+        return [
+            'title' => $event['event']->title(),
+            'status' => $event['event']->status,
+            'location' => $event['event']->location,
+            'created' => $event['event']->created,
+            'updated' => $event['event']->updated,
+            'duration' => $event['event']->duration(),
+            'start_date' => $event['date']
+        ];
+    }
+
+    /**
+     * Sort events
+     *
+     * @return array
+     */
+    private static function dateSort($a, $b)
+    {
+        if ($a['start_date'] == $b['start_date'])
+        {
+            return 0;
+        }
+        return ($a['start_date'] < $b['start_date']) ? -1 : 1;
+    }
+
+    /**
+     * Get a file from cache
+     *
+     * @return yaml
+     */
+    private function getFromCache($ical, $title)
+    {
+        return $ical->cache($this->cache->get($title));
+    }
 }
