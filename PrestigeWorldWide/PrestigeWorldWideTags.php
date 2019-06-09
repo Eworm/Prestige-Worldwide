@@ -372,13 +372,13 @@ class PrestigeWorldWideTags extends Tags
     private function addEventData($event)
     {
         return [
-            'title' => $event['event']->title(),
-            'status' => $event['event']->status,
-            'location' => $event['event']->location,
-            'created' => $event['event']->created,
-            'updated' => $event['event']->updated,
             'duration' => $event['event']->duration(),
-            'start_date' => $event['date']
+            'end_time' => $event['event']->timeEnd(),
+            'location' => $event['event']->location,
+            'start_date' => $event['date'],
+            'start_time' => $event['event']->timeStart(),
+            'status' => $event['event']->status,
+            'title' => $event['event']->title()
         ];
     }
 

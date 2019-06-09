@@ -115,7 +115,7 @@ class PrestigeWorldWideListener extends Listener
         $vCalendar = new Calendar(Config::getSiteUrl());
 
         foreach ($entries as $entry) {
-            if ($entry->has('pw_start_date')) {
+            if ($entry->has('pw_start_date') && $entry->published()) {
                 $vEvent = $this->addEventData($entry, $entry->get('pw_start_date'), $entry->get('pw_end_date'));
                 $vCalendar->addComponent($vEvent);
 
@@ -139,46 +139,37 @@ class PrestigeWorldWideListener extends Listener
     private function addEventData($entry, $start_date, $end_date)
     {
         $vEvent = new Event();
-        $entry_id = $entry->get('id');
-        $entry_title = $entry->get('title');
-        $entry_description = $entry->get('pw_description');
-        $entry_location = $entry->get('pw_location');
+        $id = $entry->get('id');
+        $title = $entry->get('title');
+        $description = $entry->get('pw_description');
+        $location = $entry->get('pw_location');
+        $status = $entry->get('pw_status');
 
         if ($entry->get('pw_recurring') == true && $entry->get('pw_recurring_frequency') != 'CUSTOM') {
             $vEvent
-                ->setDtStart($this->getCarbon($start_date))
-                ->setDtEnd($this->getCarbon($end_date))
-                ->setLocation($entry_location)
-                ->setSummary($entry_title)
-                ->setUniqueId($entry_id)
-                ->setStatus($this->getEventStatus($entry))
-                ->addRecurrenceRule($this->addRecurrenceRule($entry))
-                ->setDescription($entry_description);
+                 ->addRecurrenceRule($this->addRecurrenceRule($entry))
+                 ->setDescription($description)
+                 ->setDtStart($this->getCarbon($start_date))
+                 ->setDtEnd($this->getCarbon($end_date))
+                 ->setLocation($location)
+                 ->setStatus($status)
+                 ->setSummary($title)
+                 // ->setTimezoneString('Europe/Amsterdam')
+                 ->setUniqueId($id);
+        // ->setUseTimezone(true)
         } else {
             $vEvent
-                ->setDtStart($this->getCarbon($start_date))
-                ->setDtEnd($this->getCarbon($end_date))
-                ->setLocation($entry_location)
-                ->setSummary($entry_title)
-                ->setUniqueId($entry_id)
-                ->setStatus($this->getEventStatus($entry))
-                ->setDescription($entry_description);
+                 ->setDescription($description)
+                 ->setDtStart($this->getCarbon($start_date))
+                 ->setDtEnd($this->getCarbon($end_date))
+                 ->setLocation($location)
+                 ->setStatus($status)
+                 ->setSummary($title)
+                 // ->setTimezoneString('Europe/Amsterdam')
+                 ->setUniqueId($id);
+            // ->setUseTimezone(true)
         }
         return $vEvent;
-    }
-
-    /**
-     * Check for an event status
-     *
-     * @return string
-     */
-    private function getEventStatus($entry)
-    {
-        if ($entry->get('pw_status') != null) {
-            return $entry->get('pw_status');
-        } else {
-            return 'Confirmed';
-        }
     }
 
     /**
@@ -188,18 +179,22 @@ class PrestigeWorldWideListener extends Listener
      */
     private function addRecurrenceRule($entry)
     {
+        $byday = $entry->get('pw_recurring_byday');
+        $freq = $entry->get('pw_recurring_frequency');
+        $interval = $entry->get('pw_recurring_interval');
+
         $vRecurr = new RecurrenceRule();
         if ($entry->get('pw_recurring_ends') == 'on') {
             $vRecurr
-                ->setFreq($entry->get('pw_recurring_frequency'))
-                ->setInterval($entry->get('pw_recurring_interval'))
-                ->setByDay($entry->get('pw_recurring_byday'))
+                ->setByDay($byday)
+                ->setFreq($freq)
+                ->setInterval($interval)
                 ->setUntil($this->getCarbon($entry->get('pw_recurring_until')));
         } else {
             $vRecurr
-                ->setFreq($entry->get('pw_recurring_frequency'))
-                ->setInterval($entry->get('pw_recurring_interval'))
-                ->setByDay($entry->get('pw_recurring_byday'))
+                ->setByDay($byday)
+                ->setFreq($freq)
+                ->setInterval($interval)
                 ->setCount($entry->get('pw_recurring_count'));
         }
         return $vRecurr;

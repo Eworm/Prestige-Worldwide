@@ -274,6 +274,18 @@ class iCal_Event
         }
     }
 
+    public function timeStart()
+    {
+        $time = Carbon::createFromTimestamp($this->_timeStart)->format('H:i');
+        return $time;
+    }
+
+    public function timeEnd()
+    {
+        $time = Carbon::createFromTimestamp($this->_timeEnd)->format('H:i');
+        return $time;
+    }
+
     public function parse($content)
     {
         $content = str_replace("\r\n ", '', $content);
