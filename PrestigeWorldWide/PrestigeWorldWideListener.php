@@ -3,7 +3,7 @@
 namespace Statamic\Addons\PrestigeWorldWide;
 
 use Carbon\Carbon;
-use Eluceo\iCal\Component\Alarm;
+// use Eluceo\iCal\Component\Alarm;
 use Eluceo\iCal\Component\Calendar;
 use Eluceo\iCal\Component\Event;
 use Eluceo\iCal\Property\Event\RecurrenceRule;
@@ -144,6 +144,15 @@ class PrestigeWorldWideListener extends Listener
         $status = $entry->get('pw_status');
         $tags = $entry->get('tags');
         $title = $entry->get('title');
+
+        if ($entry->has('pw_timezone')) {
+            $timezone = $entry->get('pw_timezone');
+            $use_timezone = true;
+        } else {
+            $timezone = null;
+            $use_timezone = false;
+        }
+
         $vEvent = new Event();
 
         if ($entry->get('pw_recurring') == true && $entry->get('pw_recurring_frequency') != 'CUSTOM') {
@@ -156,9 +165,9 @@ class PrestigeWorldWideListener extends Listener
                 ->setLocation($location)
                 ->setStatus($status)
                 ->setSummary($title)
-                // ->setTimezoneString('Europe/Amsterdam')
-                ->setUniqueId($id);
-                // ->setUseTimezone(true)
+                ->setTimezoneString($timezone)
+                ->setUniqueId($id)
+                ->setUseTimezone($use_timezone);
         } else {
             $vEvent
                 ->setCategories($tags)
@@ -168,9 +177,9 @@ class PrestigeWorldWideListener extends Listener
                 ->setLocation($location)
                 ->setStatus($status)
                 ->setSummary($title)
-                // ->setTimezoneString('Europe/Amsterdam')
-                ->setUniqueId($id);
-                // ->setUseTimezone(true)
+                ->setTimezoneString($timezone)
+                ->setUniqueId($id)
+                ->setUseTimezone($use_timezone);
         }
         return $vEvent;
     }
@@ -189,13 +198,13 @@ class PrestigeWorldWideListener extends Listener
         $vRecurr = new RecurrenceRule();
         if ($entry->get('pw_recurring_ends') == 'on') {
             $vRecurr
-                ->setByDay($byday)
+                ->setByDay(\implode($byday))
                 ->setFreq($freq)
                 ->setInterval($interval)
                 ->setUntil($this->getCarbon($entry->get('pw_recurring_until')));
         } else {
             $vRecurr
-                ->setByDay($byday)
+                ->setByDay(\implode($byday))
                 ->setFreq($freq)
                 ->setInterval($interval)
                 ->setCount($entry->get('pw_recurring_count'));
