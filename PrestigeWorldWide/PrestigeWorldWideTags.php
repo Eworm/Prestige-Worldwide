@@ -324,16 +324,16 @@ class PrestigeWorldWideTags extends Tags
      */
     public function calendar()
     {
-        $feed_start = $this->getParam('start');
-        $feed_end = $this->getParam('end');
-        if (isset($feed_end))
+        $start = $this->getParam('start');
+        $end = $this->getParam('end');
+        if (isset($end))
         {
-            $feed_end = carbon($feed_start)->modify($feed_end)->format('Y-m-d H:i');
+            $end = carbon($start)->modify($end)->format('Y-m-d H:i');
         }
         $data = [];
         $ical = new iCal();
         $ical = $this->getFromCache($ical, 'pw_ical');
-        $data = $this->getEvents($ical, $data, $feed_start, $feed_end);
+        $data = $this->getEvents($ical, $data, $start, $end);
         usort($data, array($this, 'dateSort'));
         return $this->parseLoop($data);
     }
@@ -372,6 +372,7 @@ class PrestigeWorldWideTags extends Tags
     private function addEventData($event)
     {
         return [
+            'categories' => $event['event']->categories(),
             'duration' => $event['event']->duration(),
             'end_time' => $event['event']->timeEnd(),
             'location' => $event['event']->location,

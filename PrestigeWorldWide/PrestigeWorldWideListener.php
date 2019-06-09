@@ -139,35 +139,38 @@ class PrestigeWorldWideListener extends Listener
     private function addEventData($entry, $start_date, $end_date)
     {
         $vEvent = new Event();
-        $id = $entry->get('id');
-        $title = $entry->get('title');
+        $tags = $entry->get('tags');
         $description = $entry->get('pw_description');
+        $id = $entry->get('id');
         $location = $entry->get('pw_location');
         $status = $entry->get('pw_status');
+        $title = $entry->get('title');
 
         if ($entry->get('pw_recurring') == true && $entry->get('pw_recurring_frequency') != 'CUSTOM') {
             $vEvent
-                 ->addRecurrenceRule($this->addRecurrenceRule($entry))
-                 ->setDescription($description)
-                 ->setDtStart($this->getCarbon($start_date))
-                 ->setDtEnd($this->getCarbon($end_date))
-                 ->setLocation($location)
-                 ->setStatus($status)
-                 ->setSummary($title)
-                 // ->setTimezoneString('Europe/Amsterdam')
-                 ->setUniqueId($id);
-        // ->setUseTimezone(true)
+                ->addRecurrenceRule($this->addRecurrenceRule($entry))
+                ->setCategories($tags)
+                ->setDescription($description)
+                ->setDtStart($this->getCarbon($start_date))
+                ->setDtEnd($this->getCarbon($end_date))
+                ->setLocation($location)
+                ->setStatus($status)
+                ->setSummary($title)
+                // ->setTimezoneString('Europe/Amsterdam')
+                ->setUniqueId($id);
+                // ->setUseTimezone(true)
         } else {
             $vEvent
-                 ->setDescription($description)
-                 ->setDtStart($this->getCarbon($start_date))
-                 ->setDtEnd($this->getCarbon($end_date))
-                 ->setLocation($location)
-                 ->setStatus($status)
-                 ->setSummary($title)
-                 // ->setTimezoneString('Europe/Amsterdam')
-                 ->setUniqueId($id);
-            // ->setUseTimezone(true)
+                ->setCategories($tags)
+                ->setDescription($description)
+                ->setDtStart($this->getCarbon($start_date))
+                ->setDtEnd($this->getCarbon($end_date))
+                ->setLocation($location)
+                ->setStatus($status)
+                ->setSummary($title)
+                // ->setTimezoneString('Europe/Amsterdam')
+                ->setUniqueId($id);
+                // ->setUseTimezone(true)
         }
         return $vEvent;
     }

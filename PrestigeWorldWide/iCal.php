@@ -217,6 +217,11 @@ class iCal_Event
     public $updated;
 
     /**
+     * @var array
+     */
+    public $categories;
+
+    /**
      * @var integer
      */
     protected $_timeStart;
@@ -257,6 +262,11 @@ class iCal_Event
     public function sequence()
     {
         return $this->sequence;
+    }
+
+    public function categories()
+    {
+        return $this->categories;
     }
 
     public function occurrences()
@@ -303,6 +313,11 @@ class iCal_Event
         // Description
         if (preg_match('`^DESCRIPTION:(.*)$`m', $content, $m)) {
             $this->description = trim($m[1]);
+        }
+
+        // Categories
+        if (preg_match('`^CATEGORIES:(.*)$`m', $content, $m)) {
+            $this->categories = trim($m[1]);
         }
 
         // Sequence
