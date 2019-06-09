@@ -19,6 +19,7 @@ use Statamic\Extend\Listener;
 use Statamic\Events\Data\FindingFieldset;
 use Statamic\Contracts\Forms\Submission;
 use Illuminate\Http\Response;
+use Statamic\Events\StacheUpdated;
 
 class PrestigeWorldWideListener extends Listener
 {
@@ -31,7 +32,7 @@ class PrestigeWorldWideListener extends Listener
     public $events = [
         \Statamic\Events\Data\FindingFieldset::class => 'addEventTab',
         \Statamic\Events\Data\PublishFieldsetFound::class => 'addEventTab',
-        \Statamic\Events\Data\EntrySaved::class => 'saveEventCache',
+        StacheUpdated::class => 'saveEventCache',
         'Form.submission.creating' => 'handleSubmission',
         'response.created' => 'handleResponse'
     ];
