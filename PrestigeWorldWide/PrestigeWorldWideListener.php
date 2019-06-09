@@ -138,13 +138,13 @@ class PrestigeWorldWideListener extends Listener
      */
     private function addEventData($entry, $start_date, $end_date)
     {
-        $vEvent = new Event();
-        $tags = $entry->get('tags');
         $description = $entry->get('pw_description');
         $id = $entry->get('id');
         $location = $entry->get('pw_location');
         $status = $entry->get('pw_status');
+        $tags = $entry->get('tags');
         $title = $entry->get('title');
+        $vEvent = new Event();
 
         if ($entry->get('pw_recurring') == true && $entry->get('pw_recurring_frequency') != 'CUSTOM') {
             $vEvent
@@ -213,9 +213,9 @@ class PrestigeWorldWideListener extends Listener
     private function getCarbon($datetime)
     {
         if (is_numeric($datetime)) {
-            return Carbon::createFromTimestamp($datetime)->setTimezone('UTC');
+            return Carbon::createFromTimestamp($datetime);
         } else {
-            return Carbon::parse($datetime)->setTimezone('UTC')->setTimezone('UTC');
+            return Carbon::parse($datetime);
         }
     }
 }
