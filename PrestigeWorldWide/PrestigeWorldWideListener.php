@@ -194,20 +194,24 @@ class PrestigeWorldWideListener extends Listener
      */
     private function addRecurrenceRule($entry)
     {
-        $byday = $entry->get('pw_recurring_byday');
+        if ($entry->has('pw_recurring_byday')) {
+            $byday = \implode(',', $entry->get('pw_recurring_byday'));
+        } else {
+            $byday = '';
+        }
         $freq = $entry->get('pw_recurring_frequency');
         $interval = $entry->get('pw_recurring_interval');
 
         $vRecurr = new RecurrenceRule();
         if ($entry->get('pw_recurring_ends') == 'on') {
             $vRecurr
-                ->setByDay(\implode($byday))
+                ->setByDay($byday)
                 ->setFreq($freq)
                 ->setInterval($interval)
                 ->setUntil($this->getCarbon($entry->get('pw_recurring_until')));
         } else {
             $vRecurr
-                ->setByDay(\implode($byday))
+                ->setByDay($byday)
                 ->setFreq($freq)
                 ->setInterval($interval)
                 ->setCount($entry->get('pw_recurring_count'));
