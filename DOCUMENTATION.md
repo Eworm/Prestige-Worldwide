@@ -1,11 +1,10 @@
-# About Prestige Worldwide
+## About Prestige Worldwide
 The idea of Prestige Worldwide isn't to be a full fledged event system within Statamic, but to add functionality to Statamic so you can use a collection for events.
 
 ## Setup
 Prestige Worldwide requires __1 thing__: a Statamic collection. So create a collection before or after installing this addon. Then go to the addons page in the control panel, click on Prestige Worldwide and select the collection you want to use for your events. Each entry in this collection will be an event.
 
 After selecting a collection you'll see an extra tab called 'Event info' on the entry page of this collection. This tab allows you to add relevant info about this event. There's info about dates, costs, location, an external url and an organizer.
-
 
 You can also select which form to use for signups. And if you add a maximum number of participants PW will check if the max number of participants is reached. PW doesn't add things like titles or images, those are up to you.
 
@@ -55,6 +54,7 @@ The idea of PW is to give you the freedom to build your eventpage the way you wa
 * [ICS export](#ics)
 * [Add to Google Calendar](#gcal)
 * [Form or not?](#form)
+* [Calendar](#calendar)
 
 ***
 
@@ -199,4 +199,4 @@ The following variables are available: title, status, location, duration, start_
         {{ /prestige_world_wide:calendar }}
     </ul>
 
-Events added with [Happy Dates](https://statamic.com/marketplace/addons/happy-dates) will also be show in the calendar!
+Events added with [Happy Dates](https://statamic.com/marketplace/addons/happy-dates) will also be shown in the calendar!
