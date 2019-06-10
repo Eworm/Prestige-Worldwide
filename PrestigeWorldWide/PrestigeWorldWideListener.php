@@ -144,6 +144,7 @@ class PrestigeWorldWideListener extends Listener
         $status = $entry->get('pw_status');
         $tags = $entry->get('tags');
         $title = $entry->get('title');
+        $url = $entry->url();
 
         if ($entry->has('pw_timezone')) {
             $timezone = $entry->get('pw_timezone');
@@ -167,6 +168,7 @@ class PrestigeWorldWideListener extends Listener
                 ->setSummary($title)
                 ->setTimezoneString($timezone)
                 ->setUniqueId($id)
+                ->setUrl($url)
                 ->setUseTimezone($use_timezone);
         } else {
             $vEvent
@@ -179,6 +181,7 @@ class PrestigeWorldWideListener extends Listener
                 ->setSummary($title)
                 ->setTimezoneString($timezone)
                 ->setUniqueId($id)
+                ->setUrl($url)
                 ->setUseTimezone($use_timezone);
         }
         return $vEvent;

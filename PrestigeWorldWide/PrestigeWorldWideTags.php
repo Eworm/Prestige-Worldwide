@@ -379,7 +379,8 @@ class PrestigeWorldWideTags extends Tags
             'start_date' => $event['date'],
             'start_time' => $event['event']->timeStart(),
             'status' => $event['event']->status,
-            'title' => $event['event']->title()
+            'title' => $event['event']->title(),
+            'url' => $event['event']->url()
         ];
     }
 

@@ -222,6 +222,11 @@ class iCal_Event
     public $categories;
 
     /**
+     * @var string
+     */
+    public $url;
+
+    /**
      * @var integer
      */
     protected $_timeStart;
@@ -267,6 +272,11 @@ class iCal_Event
     public function categories()
     {
         return $this->categories;
+    }
+
+    public function url()
+    {
+        return $this->url;
     }
 
     public function occurrences()
@@ -318,6 +328,11 @@ class iCal_Event
         // Categories
         if (preg_match('`^CATEGORIES:(.*)$`m', $content, $m)) {
             $this->categories = trim($m[1]);
+        }
+
+        // Categories
+        if (preg_match('`^URL:(.*)$`m', $content, $m)) {
+            $this->url = trim($m[1]);
         }
 
         // Sequence
