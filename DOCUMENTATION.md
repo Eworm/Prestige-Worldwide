@@ -12,6 +12,7 @@ You can also select which form to use for signups. And if you add a maximum numb
 * [Showing a list of events](#list)
 * [Showing info on a detail page](#detail)
 * [Using a signup form](#form)
+* [Showing a calendar](#calendar)
 
 ## Showing a list of events <a id="list"></a>
 Use these for a list of events. PW adds custom filters to a Statamic collection, the rest is pure Statamic. [More info about collections is here](https://docs.statamic.com/tags/collection).
@@ -154,3 +155,48 @@ If you selected a form you will have to add the code for that form on the event 
     {{ /if }}
 
 to hide it or show a message when the event is full.
+
+## One calendar to rule them all <a id="calendar"></a>
+HD downloads all ical files and saves them in the Statamic cache when you hit refresh all. You can display a calendar of all events with this tag.
+<table>
+    <tbody>
+        <tr>
+            <td>Get</td>
+            <td>`{{ prestige_world_wide:calendar }}{{ /prestige_world_wide:calendar }}`</td>
+            <td>Returns an array</td>
+        </tr>
+    </tbody>
+</table>
+The following variables are available: title, status, location, duration, start_date, start_time, end_time, categories and url.
+
+### Parameters
+
+<table>
+<tbody>
+<tr>
+<td>start</td>
+<td>A date or just `now`</td>
+</tr>
+<tr>
+<td>end</td>
+<td>All options available as a [date modifier](https://docs.statamic.com/modifiers/modify_date)</td>
+</tr>
+</tbody>
+</table>
+
+**Example**   
+
+    <ul>
+        {{ prestige_world_wide:calendar start=now end="+4 weeks" }}
+        <li>
+            <strong><a href="{{ url }}">{{ title }} ({{ duration divide="60" }} minutes)</a></strong>
+            <br>
+            {{ start_date }} {{ start_time }} - {{ end_time }} ({{ status }})
+            <br>
+            {{ location }}
+            <i>{{ categories }}</i>
+        </li>
+        {{ /prestige_world_wide:calendar }}
+    </ul>
+
+Events added with [Happy Dates](https://statamic.com/marketplace/addons/prestige-worldwide) will also be used in the calendar!

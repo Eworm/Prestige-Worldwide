@@ -1,6 +1,6 @@
 name: PrestigeWorldWide
-version: '1.4'
-description: 'Add an event manager to Statamic'
+version: '1.5'
+description: 'An event manager for Statamic'
 developer: 'Wout Mager'
 developer_url: 'https://woutmager.nl'
 commercial: true
