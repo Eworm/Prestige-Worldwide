@@ -157,7 +157,7 @@ If you selected a form you will have to add the code for that form on the event 
 to hide it or show a message when the event is full.
 
 ## One calendar to rule them all <a id="calendar"></a>
-HD downloads all ical files and saves them in the Statamic cache when you hit refresh all. You can display a calendar of all events with this tag.
+PW generates an ical file of all entries with a `pw_start_date` and saves it in the Statamic cache when you save an entry. You can display a calendar of all events with this tag.
 <table>
     <tbody>
         <tr>
@@ -199,4 +199,4 @@ The following variables are available: title, status, location, duration, start_
         {{ /prestige_world_wide:calendar }}
     </ul>
 
-Events added with [Happy Dates](https://statamic.com/marketplace/addons/prestige-worldwide) will also be used in the calendar!
+Events added with [Happy Dates](https://statamic.com/marketplace/addons/happy-dates) will also be show in the calendar!
