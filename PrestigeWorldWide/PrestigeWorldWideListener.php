@@ -31,7 +31,7 @@ class PrestigeWorldWideListener extends Listener
      */
     public $events = [
         \Statamic\Events\Data\FindingFieldset::class => 'addEventTab',
-        \Statamic\Events\Data\PublishFieldsetFound::class => 'addEventTab',
+        // \Statamic\Events\Data\PublishFieldsetFound::class => 'addEventTab',
         StacheUpdated::class => 'saveEventCache',
         'Form.submission.creating' => 'handleSubmission',
         'response.created' => 'handleResponse'
@@ -42,35 +42,27 @@ class PrestigeWorldWideListener extends Listener
      *
      * @var array
      */
-    public function addEventTab($event)
+    public function addEventTab(FindingFieldset $eventCollection)
     {
-
-        // Get the current URL
-        $this->url = $_SERVER['REQUEST_URI'];
-
         // Get the saved events collection from the settings
         $this->eventsCollection = $this->getConfig('my_collections_field');
 
-        // Check if the entry is in the correct collection
-        if (($event->type == 'entry') && (strpos($this->url, $this->eventsCollection) == true)) {
-            $fieldset = $event->fieldset;
-            $sections = $fieldset->sections();
-            $fields = YAML::parse(File::get($this->getDirectory() . '/resources/fieldsets/content.yaml'))['fields'];
+        // Check if the entry is in the correct collection and if this is a page
+        if ($eventCollection->type == 'entry') {
+            if ($eventCollection->data->collectionName() == $this->eventsCollection) {
+                $fieldset = $eventCollection->fieldset;
+                $sections = $fieldset->sections();
+                $fields = YAML::parse(File::get($this->getDirectory().'/resources/fieldsets/content.yaml'))['fields'];
 
-            if ($this->getConfig('event_timezone') == false) {
-                // Remove the custom timezone based on the addon setting
-                unset($fields['pw_timezone']);
+                $sections['event'] = [
+                     'display' => 'Event info',
+                     'fields' => $fields
+                 ];
+
+                $contents = $fieldset->contents();
+                $contents['sections'] = $sections;
+                $fieldset->contents($contents);
             }
-
-            $sections['event'] = [
-                'display' => 'Event info',
-                'fields' => $fields
-            ];
-
-            $contents = $fieldset->contents();
-            $contents['sections'] = $sections;
-
-            $fieldset->contents($contents);
         }
     }
 
