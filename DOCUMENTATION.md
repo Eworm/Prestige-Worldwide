@@ -41,7 +41,11 @@ The idea of PW is to give you the freedom to build your eventpage the way you wa
 * Start date: `{{ pw_start_date }}`
 * End date: `{{ pw_end_date }}`
 * Cost: `{{ pw_costs }}`
-* Location: `{{ pw_location }}`
+* Location name: `{{ pw_location_name }}`
+* Location/address: `{{ pw_location }}`
+* Postal code: `{{ pw_postal }}`
+* City: `{{ pw_city }}`
+* Country code: `{{ pw_country }}`
 * URL: `{{ pw_url }}`
 * Organizer: `{{ pw_organizer }}`
 * Organizer email: `{{ pw_organizer_email }}`
@@ -55,6 +59,7 @@ The idea of PW is to give you the freedom to build your eventpage the way you wa
 * [Add to Google Calendar](#gcal)
 * [Form or not?](#form)
 * [Calendar](#calendar)
+* [JSON-LD](#json)
 
 ***
 
@@ -200,3 +205,15 @@ The following variables are available: title, status, location, duration, start_
     </ul>
 
 Events added with [Happy Dates](https://statamic.com/marketplace/addons/happy-dates) will also be shown in the calendar!
+
+## LD-json <a id="json"></a>
+PW can generate JSON-LD with the event information.
+<table>
+    <tbody>
+        <tr>
+            <td>Get</td>
+            <td>`{{ prestige_world_wide:schema }}`</td>
+            <td>Returns json</td>
+        </tr>
+    </tbody>
+</table>

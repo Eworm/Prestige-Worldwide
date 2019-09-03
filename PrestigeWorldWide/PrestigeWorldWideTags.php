@@ -33,7 +33,7 @@ class PrestigeWorldWideTags extends Tags
     }
 
     /**
-     * The {{ prestige_world_wide:start_date }} tag
+     * Get the start date
      *
      * @return string
      */
@@ -47,7 +47,7 @@ class PrestigeWorldWideTags extends Tags
     }
 
     /**
-     * The {{ prestige_world_wide:end_date }} tag
+     * Get the end date
      *
      * @return string
      */
@@ -55,6 +55,90 @@ class PrestigeWorldWideTags extends Tags
     {
         if (isset($this->context['pw_end_date'])) {
             return $this->context['pw_end_date'];
+        } else  {
+            return NULL;
+        }
+    }
+
+    /**
+     * Get the description
+     *
+     * @return string
+     */
+    private function description()
+    {
+        if (isset($this->context['pw_description'])) {
+            return $this->context['pw_description'];
+        } else  {
+            return NULL;
+        }
+    }
+
+    /**
+     * Get the location
+     *
+     * @return string
+     */
+    private function location()
+    {
+        if (isset($this->context['pw_location'])) {
+            return $this->context['pw_location'];
+        } else  {
+            return NULL;
+        }
+    }
+
+    /**
+     * Get the location name
+     *
+     * @return string
+     */
+    private function locationName()
+    {
+        if (isset($this->context['pw_location_name'])) {
+            return $this->context['pw_location_name'];
+        } else  {
+            return NULL;
+        }
+    }
+
+    /**
+     * Get the city
+     *
+     * @return string
+     */
+    private function city()
+    {
+        if (isset($this->context['pw_city'])) {
+            return $this->context['pw_city'];
+        } else  {
+            return NULL;
+        }
+    }
+
+    /**
+     * Get the postal code
+     *
+     * @return string
+     */
+    private function postal()
+    {
+        if (isset($this->context['pw_postal'])) {
+            return $this->context['pw_postal'];
+        } else  {
+            return NULL;
+        }
+    }
+
+    /**
+     * Get the country
+     *
+     * @return string
+     */
+    private function country()
+    {
+        if (isset($this->context['pw_country'])) {
+            return $this->context['pw_country'];
         } else  {
             return NULL;
         }
@@ -194,16 +278,9 @@ class PrestigeWorldWideTags extends Tags
      */
     private function calendarLink($type)
     {
-        // Use the system or the event timezone
-        if ($this->getConfig('event_timezone') == false) {
-            $tz = new \DateTimeZone(Config::get('system.timezone'));
-        } else {
-            $tz = new \DateTimeZone($this->context['pw_timezone']);
-        }
-
         // Format the start & end dates
-        $from = \DateTime::createFromFormat('Y-m-d H:i', $this->startDate(), $tz);
-        $to = \DateTime::createFromFormat('Y-m-d H:i', $this->endDate(), $tz);
+        $from = \DateTime::createFromFormat('Y-m-d H:i', $this->startDate(), $this->getTimezone());
+        $to = \DateTime::createFromFormat('Y-m-d H:i', $this->endDate(), $this->getTimezone());
 
         // Get the description
         $description = isset($this->context['pw_description']) ? $this->context['pw_description'] : "";
@@ -406,5 +483,54 @@ class PrestigeWorldWideTags extends Tags
     private function getFromCache($ical, $title)
     {
         return $ical->cache($this->cache->get($title));
+    }
+
+    /**
+     * The {{ prestige_world_wide:schema }} tag
+     *
+     * @return string
+     */
+    public function schema()
+    {
+        $startdate = \DateTime::createFromFormat('Y-m-d H:i', $this->startDate(), $this->getTimezone());
+        $enddate = \DateTime::createFromFormat('Y-m-d H:i', $this->endDate(), $this->getTimezone());
+
+        return '<script type="application/ld+json">
+                {
+                    "@context": "https://schema.org",
+                    "@type": "Event",
+                    "name": "' . $this->context['title'] . '",
+                    "description": "' . $this->description() . '",
+                    "startDate": "' . $startdate->format('Y-m-d H:i T') . '",
+                    "endDate": "' . $enddate->format('Y-m-d H:i T') . '",
+                    "location": {
+                        "@type": "Place",
+                        "name": "' . $this->locationName() . '",
+                        "address": {
+                            "@type": "PostalAddress",
+                            "streetAddress": "' . $this->location() . '",
+                            "addressLocality": "' . $this->city() . '",
+                            "postalCode": "' . $this->postal() . '",
+                            "addressCountry": "' . $this->country() . '"
+                        }
+                    }
+                }
+                </script>';
+    }
+
+
+    /**
+     * Get the timezone
+     *
+     * @return string
+     */
+    private function getTimezone()
+    {
+        // Use the system or the event timezone
+        if ($this->getConfig('event_timezone') == false) {
+            return new \DateTimeZone(Config::get('system.timezone'));
+        } else {
+            return new \DateTimeZone($this->context['pw_timezone']);
+        }
     }
 }

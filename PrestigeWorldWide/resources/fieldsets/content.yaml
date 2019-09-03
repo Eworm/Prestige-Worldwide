@@ -115,9 +115,6 @@ fields:
     type: text
     display: "Cost"
     width: 50
-  pw_location:
-    type: text
-    display: "Address or location"
   pw_url:
     type: text
     display: "External url"
@@ -128,6 +125,23 @@ fields:
     type: text
     display: "Emailaddress organizer"
     mode: email
+  Location:
+    type: section
+  pw_location_name:
+    type: text
+    display: "Name"
+  pw_location:
+    type: text
+    display: "Address"
+  pw_postal:
+    type: text
+    display: "Postal code"
+  pw_city:
+    type: text
+    display: "City"
+  pw_country:
+    type: text
+    display: "Country code"
   Signup form:
     type: section
   pw_has_form:
